@@ -1,0 +1,13 @@
+<nav>
+    <div class="nav-wrapper teal">
+
+      <!-- <a href="#" class="brand-logo right">Movie History</a> -->
+      <ul class="right">
+        <!-- <li><a href="#/new-movies">Find New Movies</a></li> -->
+        <!-- <li><a href="#/search">Search Your Movies</a></li> -->
+        <!-- <li><a href="#/login">Login/Register</a></li> -->
+        <li><a href="#/login" ng-if="!isAuthenticated()">Login/Register</a></li>
+        <li><a href="#/login" ng-if="isAuthenticated()" ng-click="logout()">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
