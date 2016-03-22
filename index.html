@@ -1,0 +1,40 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Upsell Tracker</title>
+  <!-- <link rel="stylesheet" href="styles/styles.css"> -->
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="lib/node_modules/materialize-css/dist/css/materialize.min.css"  media="screen,projection">
+</head>
+
+<body ng-app="UpsellTracker">
+
+  <div ng-controller="PageCtrl">
+    <!-- Header  -->
+    <nav ng-include="'partials/navbar.html'"></nav>
+    <!-- Main View Div  -->
+    <div ng-view></div>
+  </div>
+
+  <!-- Component Links -->
+  <script src="lib/node_modules/angular/angular.min.js"></script>
+  <script src="lib/node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="lib/node_modules/angular-route/angular-route.min.js"></script>
+  <!-- <script src="lib/node_modules/firebase/lib/firebase-web.js"></script> -->
+  <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
+  <script src="lib/node_modules/angularfire/dist/angularfire.min.js"></script>
+  <script src="lib/node_modules/materialize-css/dist/js/materialize.min.js"></script>
+
+  <!-- App JS Files -->
+  <script src="app/app.js"></script>
+  <script src="app/factories/AuthFactory.js"></script>
+  <script src="app/factories/UpsellsFactory.js"></script>
+  <script src="app/controllers/LoginCtrl.js"></script>
+  <script src="app/controllers/UpsellCtrl.js"></script>
+  <script src="app/controllers/PageCtrl.js"></script>
+
+
+</body>
+</html>
