@@ -1,14 +1,14 @@
 "use strict";
 
-UpsellTracker.factory("authFactory", (firebaseURL, $http) => {
+UpsellTracker.factory("authFactory", (firebaseURL, $http, $q) => {
   let ref = new Firebase(firebaseURL);
-  let currentUserData = null;
+  let currentUserID = null;
 
 
   return {
 
-    userID () {
-      return currentUserData.uid;
+    getUserID () {
+      return currentUserID;
     },
 
     /*
@@ -18,7 +18,7 @@ UpsellTracker.factory("authFactory", (firebaseURL, $http) => {
       let authData = ref.getAuth();
 
       if (authData) {
-        currentUserData = authData;
+        currentUserID = authData.uid;
         return true;
       } else {
         return false;
@@ -77,8 +77,12 @@ UpsellTracker.factory("authFactory", (firebaseURL, $http) => {
      /*
       Store each Firebase user's id in the `users` collection
      */
-    storeUser (authData) {
-      let stringifiedUser = JSON.stringify({ uid: authData.uid });
+    storeUser (authData, accountData) {
+      let stringifiedUser = JSON.stringify({ 
+        uid: authData.uid,
+        email: accountData.email,
+        userName: accountData.userName
+      });
 
       return new Promise((resolve, reject) => {
         $http
@@ -88,6 +92,24 @@ UpsellTracker.factory("authFactory", (firebaseURL, $http) => {
             err => reject(err)
           );
       });
+    },
+
+    pullUser (userID) {
+      return new Promise((resolve, reject) => {
+        $http
+          // get object with userID corresponding to passed argument ID (via authenticate)
+          .get(`${firebaseURL}/users.json?orderBy="uid"&equalTo="${userID}"`)
+          .then(
+            userObject => {
+              // response.data is an object with another object as property; returning the nested object via Objects.keys
+              let userData = userObject.data[Object.keys(userObject.data)[0]];
+              resolve(userData);
+            },
+            err => reject(err)
+          );
+      });
+
     }
+    
   };
 });

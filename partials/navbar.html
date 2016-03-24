@@ -7,6 +7,7 @@
         <!-- <li><a href="#/search">Search Your Movies</a></li> -->
         <!-- <li><a href="#/login">Login/Register</a></li> -->
         <li><a href="#/login" ng-if="!isAuthenticated()">Login/Register</a></li>
+        <li><a ng-if="isAuthenticated()">Signed in as {{ $parent.currentUser.userName }}</a></li>
         <li><a href="#/login" ng-if="isAuthenticated()" ng-click="logout()">Logout</a></li>
       </ul>
     </div>

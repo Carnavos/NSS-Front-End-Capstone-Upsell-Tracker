@@ -27,25 +27,10 @@ UpsellTracker.config(["$routeProvider",
         controller: "UpsellCtrl",
         resolve: { isAuth }
       }).
-      // when("/songs/list", {
-      //   templateUrl: "partials/song-list.html",
-      //   controller: "SongCtrl",
-      //   resolve: { isAuth }
-      // }).
       when("/login", {
         templateUrl: "partials/login.html",
         controller: "LoginCtrl"
       }).
-      // when("/songs/new", {
-      //   templateUrl: "partials/song-form.html",
-      //   controller: "SongFormCtrl",
-      //   resolve: { isAuth }
-      // }).
-      // when("/songs/:songId", {
-      //   templateUrl: "partials/song-brief.html",
-      //   controller: "SongDetailCtrl",
-      //   resolve: { isAuth }
-      // }).
       otherwise({
         redirectTo: "/"
       });

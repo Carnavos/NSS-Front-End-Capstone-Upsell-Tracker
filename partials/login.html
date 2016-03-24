@@ -4,10 +4,13 @@
 			<section>
   			<h1>Login or Register</h1>
   			<div>
-    			Email: <input type="text" autofocus="true" ng-model="account.email" />
+    			User Name: <input type="text" autofocus="true" ng-model="account.userName">
   			</div>
+        <div>
+          Email: <input type="text" autofocus="true" ng-model="account.email">
+        </div>
   			<div>
-    			Password: <input type="password" ng-model="account.password" />
+    			Password: <input type="password" ng-model="account.password">
   			</div>
   			<button class="waves-effect waves-light btn" ng-click="login()">Login</button>
   			<button class="waves-effect waves-light btn" ng-click="register()">Register</button>
