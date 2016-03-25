@@ -4,10 +4,27 @@
   <header><h5>Permitted View of Upsells</h5></header>
 	
 	<!-- ng-Repeat through upsells and display only those which meet access permission -->
- 	<ul class="collection" ng-repeat="upsell in upsells" ng-show="viewAllowed(upsell)">
+ 	<ul class="collection" ng-repeat="upsell in upsells" ng-show="viewAllowed(upsell)" ng-init="upsell.closed = false">
+
     <li class="collection-item">
-    	{{ upsell.AccountID }}
+			
+			<!-- Account Name -->
+    	<span ng-click="upsell.editing = true" ng-hide="upsell.editing">{{ upsell.AccountName }}</span>
+			<input ng-change="upsell.edited = true" ng-blur="upsell.editing = false;" ng-enter="upsell.editing = false;" ng-show="upsell.editing" ng-model="upsell.AccountName" class="editing-label" type="text" focus-on-show>
+
+			<!-- Account ID -->
+    	<span>{{ upsell.AccountID }}</span>
+    	<span>{{ upsell.PreviousContractID }}</span>
+
+    	<span class="right">
+	      <input type="checkbox" id="upsellStatus" class="filled-in" ng-model="upsell.closed">
+      	<label for="upsellStatus" ng-if="upsell.closed">Closed</label>
+      	<label for="upsellStatus" ng-if="!upsell.closed">Open</label>
+    	</span>
+			<!-- <input ng-model="upsell.closed" type="checkbox"> -->
+			<!-- <input ng-model="upsell.DateSent" type="date" class="datepicker"> -->
 			<button type="button" class="waves-effect waves-teal btn-flat right" ng-click="deleteUpsell(upsell.id, $index)">Delete</button>
+			<button type="button" ng-show="upsell.edited" class="waves-effect waves-teal btn-flat right" ng-click="editUpsell(upsell.id)">Save</button>
 		</li>
   </ul>
 
@@ -17,3 +34,17 @@
 
 
 </article>
+
+<div class="item" ng-class="{'editing-item': editing, 'edited': todo.edited, 'completed': todo.completed}" 
+      ng-repeat="todo in todos | orderBy: 'completed'" ng-init="todo.completed = false">
+	<input ng-model="todo.completed" type="checkbox"/>
+	<span ng-click="todo.completed = !todo.completed; todo.edited"></span>
+	<label ng-click="editing = true" ng-hide="editing" ng-click="helloWorld()">
+	  {{todo.name}}</label>
+	<input ng-change="todo.edited = true" ng-blur="editing = false;" ng-show="editing" ng-model="todo.name" class="editing-label" type="text"/>
+	<div class="actions">
+	  <a href="" ng-click="editing = !editing">Edit</a>
+	  <a href="" ng-click="saveTodos(todo)">Save</a>
+	  <a href="" ng-click="deleteTodo(todo, $index)"  class="Delete">delete</a>
+	</div>
+</div>

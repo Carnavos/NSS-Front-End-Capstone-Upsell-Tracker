@@ -30,9 +30,8 @@ UpsellTracker.controller("UpsellCtrl",
     );
 
     $scope.addUpsell = function () {
-    	console.log(`authFactory.getUserID: `, authFactory.getUserID);
-    	let userID = authFactory.getUserID();
-
+      console.log(`authFactory.getUserID: `, authFactory.getUserID);
+      let userID = authFactory.getUserID();
     	let newUpsell = {
     		"userID": userID,
   		  "CSM": "Greg Williams",
@@ -43,7 +42,8 @@ UpsellTracker.controller("UpsellCtrl",
 	      "NewContractID": 111113,
 	      "NewMRR": 3000,
 	      "OrderID": 111113,
-	      "DateSent": "2016-01-13",
+        "DateSent": "2016-01-13",
+	      "Closed": true,
 	      "DateClosed": "2016-02-17",
 	      "Term": 12,
 	      "OneTimeFee": 0
@@ -59,24 +59,35 @@ UpsellTracker.controller("UpsellCtrl",
 
     // delete upsell from database, then remove from page using $index in the ng-repeat directive
   	$scope.deleteUpsell = function (upsellID, $index) {
-  		$http.delete(`${firebaseURL}/upsells/${upsellID}.json`)
-  		.then(
-  			() => {
-  				console.log(`Upsell Deleted Successfully`);
-  				$scope.upsells.splice($index, 1);
-  				console.log(`$scope.upsells post delete: `, $scope.upsells);
+      $http.delete(`${firebaseURL}/upsells/${upsellID}.json`)
+      .then(
+        () => {
+          console.log(`Upsell Deleted Successfully`);
+          $scope.upsells.splice($index, 1);
+          console.log(`$scope.upsells post delete: `, $scope.upsells);
+        },
+        rej => console.log(`Delete Error`, rej)
+      );
+    };
+
+    // return boolean for rep/admin view permissions on an upsell
+    $scope.viewAllowed = function (upsell)  {
+      return $scope.$parent.currentUser.uid === upsell.userID || $scope.$parent.currentUser.admin;
+    };
+
+    // accepts local upsell ID and uses a PUT request to update the upsell object in Firebase
+    $scope.editUpsell = function (upsellID) {
+      let editedUpsell = $scope.upsells.filter(element => element.id === upsellID)[0];
+			console.log(`editedUpsell: `, editedUpsell);
+      $http.put(`${firebaseURL}/upsells/${upsellID}.json`, editedUpsell)
+      .then(
+        () => {
+          console.log(`Upsell Updated Successfully`);
+          // disable temporary save button
+          editedUpsell.edited = false;
   			},
-  			rej => console.log(`Delete Error`, rej)
+  			rej => console.log(`Update/PUT Error`, rej)
 			);
-  	};
-
-		$scope.viewAllowed = function (upsell) {
-			if ($scope.$parent.currentUser.uid === upsell.userID || $scope.$parent.currentUser.admin) {
-				return true;
-			} else {
-				return false;
-			}
-		};
-
+    };
 	}
 ]);

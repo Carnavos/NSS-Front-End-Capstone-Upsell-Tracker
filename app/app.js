@@ -1,7 +1,48 @@
 "use strict";
 
 let UpsellTracker = angular.module("UpsellTracker", ["ngRoute", "firebase"])
-  .constant('firebaseURL', "https://tcupselltracker.firebaseio.com");
+  .constant('firebaseURL', "https://tcupselltracker.firebaseio.com")
+
+// This directive allows us to pass a function in on an enter key to do what we want.
+.directive('ngEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 13) {
+                scope.$apply(function (){
+                  scope.$eval(attrs.ngEnter);
+                });
+ 
+                event.preventDefault();
+            }
+        });
+    };
+})
+// autofocus directive for editing fields (not angular native)
+.directive('focusOnShow', function($timeout) {
+    return {
+      restrict: 'A',
+      link: function($scope, $element, $attr) {
+        if ($attr.ngShow){
+          $scope.$watch($attr.ngShow, function(newValue){
+              if(newValue){
+                  $timeout(function(){
+                    $element[0].focus();
+                  }, 0);
+              }
+          });      
+        }
+        if ($attr.ngHide){
+            $scope.$watch($attr.ngHide, function(newValue){
+                if(!newValue){
+                    $timeout(function(){
+                        $element[0].focus();
+                    }, 0);
+                }
+            });      
+        }
+      }
+    };
+});
 
 /*
   Define a promise for any view that needs an authenticated user
