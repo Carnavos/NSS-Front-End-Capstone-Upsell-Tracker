@@ -1,14 +1,18 @@
 <article>
 
-  <header><h5>Raw List of Upsells</h5></header>
-  <header><h5>User: {{  }}</h5></header>
-
-  <div ng-repeat="upsell in upsells" class="col m-3">
-    <p>{{ upsell.AccountNumber }}</p>
-  </div>
+  <header><h5>User: {{ $parent.currentUser.userName }}</h5></header>
+  <header><h5>Permitted View of Upsells</h5></header>
+	
+	<!-- ng-Repeat through upsells and display only those which meet access permission -->
+ 	<ul class="collection" ng-repeat="upsell in upsells" ng-show="viewAllowed(upsell)">
+    <li class="collection-item">
+    	{{ upsell.AccountID }}
+			<button type="button" class="waves-effect waves-teal btn-flat right" ng-click="deleteUpsell(upsell.id, $index)">Delete</button>
+		</li>
+  </ul>
 
 <div>
-	<button type="button" ng-click="addUpsell()">Add Test Song</button>
+	<button type="button" ng-click="addUpsell()">Add Test Upsell</button>
 </div>
 
 

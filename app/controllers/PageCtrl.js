@@ -22,11 +22,10 @@ UpsellTracker.controller("PageCtrl",
       authFactory.unauthenticate();
       // empty current user upon logout
       $scope.currentUser = {};
-    }
+    };
 
     // init pageCtrl command to pull user if authentication has persisted through reload (pullUser otherwise only running on login)
-      if ($scope.isAuthenticated()) {
-        // authFactory.pullUser();
+      if (authFactory.isAuthenticated()) {
         console.log(`PageCtrl Test Run`);
         authFactory.pullUser(authFactory.getUserID())
         .then(

@@ -11,13 +11,12 @@ UpsellTracker.controller("LoginCtrl",
 
     // Variables on $scope for use in DOM
     $scope.account = { email: "", password: "", userName: "" };
-    $scope.message = "";
 
     /*
       Attempt to register a new user account.
       If successful, attempts to store user in Firebase (with additional account details), then logs user in.
      */
-    $scope.register = () => {
+    $scope.register = function () {
       authFactory.register($scope.account)
         .then(
           // register resolve
@@ -40,7 +39,7 @@ UpsellTracker.controller("LoginCtrl",
         );
     };
 
-    $scope.login = () =>
+    $scope.login = function () {
       authFactory
         .authenticate($scope.account)
         .then(
@@ -56,6 +55,7 @@ UpsellTracker.controller("LoginCtrl",
           // pullUser resolve
           returnedUserObject => {
             console.log(`Current User Pulled/Defined: `, returnedUserObject);
+            $scope.$parent.currentUser = returnedUserObject;
             // change path
             $location.path("/");
             $scope.$apply();  // Needed for $location.path() to succeed
@@ -63,6 +63,7 @@ UpsellTracker.controller("LoginCtrl",
           // pullUser reject
           error => console.log(`error: `, error)
         );
+    };
 
   }
 ]);

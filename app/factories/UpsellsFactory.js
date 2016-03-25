@@ -1,9 +1,9 @@
 "use strict";
 
-UpsellTracker.factory("upsellsFactory", ($http, firebaseURL, authFactory) =>
+UpsellTracker.factory("upsellsFactory", ($http, firebaseURL) =>
   () =>
     new Promise((resolve, reject) => {
-
+      console.log(`upsellsFactory run`);
       $http
         .get(`${firebaseURL}/upsells/.json`)
         .then(

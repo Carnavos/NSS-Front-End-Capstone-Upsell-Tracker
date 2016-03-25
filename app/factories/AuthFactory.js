@@ -1,6 +1,6 @@
 "use strict";
 
-UpsellTracker.factory("authFactory", (firebaseURL, $http, $q) => {
+UpsellTracker.factory("authFactory", (firebaseURL, $http) => {
   let ref = new Firebase(firebaseURL);
   let currentUserID = null;
 
@@ -8,6 +8,7 @@ UpsellTracker.factory("authFactory", (firebaseURL, $http, $q) => {
   return {
 
     getUserID () {
+      console.log(`get userID run`);
       return currentUserID;
     },
 
@@ -81,7 +82,9 @@ UpsellTracker.factory("authFactory", (firebaseURL, $http, $q) => {
       let stringifiedUser = JSON.stringify({ 
         uid: authData.uid,
         email: accountData.email,
-        userName: accountData.userName
+        userName: accountData.userName,
+        // default users to non-admin (changed one manually in Firebase)
+        admin: false
       });
 
       return new Promise((resolve, reject) => {

@@ -23,13 +23,14 @@ UpsellTracker.controller("UpsellCtrl",
           $scope.upsells.push(upsellsObject[key]);
         });
         $scope.$apply();
+        console.log(`$scope.upsells: `, $scope.upsells);
       },
       // Handle reject() from the promise
       err => console.log(err)
     );
 
-    $scope.addUpsell = () => {
-    	console.log(`authFactory.getUserID: `, authFactory.getUserID());
+    $scope.addUpsell = function () {
+    	console.log(`authFactory.getUserID: `, authFactory.getUserID);
     	let userID = authFactory.getUserID();
 
     	let newUpsell = {
@@ -51,11 +52,31 @@ UpsellTracker.controller("UpsellCtrl",
     	$http.post(`${firebaseURL}/upsells.json`,
   			JSON.stringify(newUpsell)
   		).then(
-  			() => console.log(`song successfully added!`),
+  			() => console.log(`Song Successfully Added!`),
   			(error) => console.log(`error: `, error)
   		);
     };
 
+    // delete upsell from database, then remove from page using $index in the ng-repeat directive
+  	$scope.deleteUpsell = function (upsellID, $index) {
+  		$http.delete(`${firebaseURL}/upsells/${upsellID}.json`)
+  		.then(
+  			() => {
+  				console.log(`Upsell Deleted Successfully`);
+  				$scope.upsells.splice($index, 1);
+  				console.log(`$scope.upsells post delete: `, $scope.upsells);
+  			},
+  			rej => console.log(`Delete Error`, rej)
+			);
+  	};
+
+		$scope.viewAllowed = function (upsell) {
+			if ($scope.$parent.currentUser.uid === upsell.userID || $scope.$parent.currentUser.admin) {
+				return true;
+			} else {
+				return false;
+			}
+		};
 
 	}
 ]);
