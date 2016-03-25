@@ -3,11 +3,80 @@
 UpsellTracker.controller("UpsellCtrl", 
 	[
 	"$scope",
+	"upsellsFactory",
 	"authFactory",
+	"$http",
+	"firebaseURL",
 
-	function ($scope, authFactory) {
+	function ($scope, upsellsFactory, authFactory, $http, firebaseURL) {
 
     $scope.jeff = "jeffrey!";
+
+    // use ng-show/hide or ng-if to display current user's data on partial
+    $scope.upsells = [];
+
+    upsellsFactory().then(
+      // Handle resolve() from the promise
+      upsellsObject => {
+        Object.keys(upsellsObject).forEach(key => {
+          upsellsObject[key].id = key;
+          $scope.upsells.push(upsellsObject[key]);
+        });
+        $scope.$apply();
+        console.log(`$scope.upsells: `, $scope.upsells);
+      },
+      // Handle reject() from the promise
+      err => console.log(err)
+    );
+
+    $scope.addUpsell = function () {
+    	console.log(`authFactory.getUserID: `, authFactory.getUserID);
+    	let userID = authFactory.getUserID();
+
+    	let newUpsell = {
+    		"userID": userID,
+  		  "CSM": "Greg Williams",
+	      "AccountName": "Globocom Inc",
+	      "AccountID": 111222,
+	      "PreviousContractID": 111112, 
+	      "PreviousMRR": 1500,
+	      "NewContractID": 111113,
+	      "NewMRR": 3000,
+	      "OrderID": 111113,
+	      "DateSent": "2016-01-13",
+	      "DateClosed": "2016-02-17",
+	      "Term": 12,
+	      "OneTimeFee": 0
+    	};
+
+    	$http.post(`${firebaseURL}/upsells.json`,
+  			JSON.stringify(newUpsell)
+  		).then(
+  			() => console.log(`Song Successfully Added!`),
+  			(error) => console.log(`error: `, error)
+  		);
+    };
+
+    // delete upsell from database, then remove from page using $index in the ng-repeat directive
+  	$scope.deleteUpsell = function (upsellID, $index) {
+  		$http.delete(`${firebaseURL}/upsells/${upsellID}.json`)
+  		.then(
+  			() => {
+  				console.log(`Upsell Deleted Successfully`);
+  				$scope.upsells.splice($index, 1);
+  				console.log(`$scope.upsells post delete: `, $scope.upsells);
+  			},
+  			rej => console.log(`Delete Error`, rej)
+			);
+  	};
+
+		$scope.viewAllowed = function (upsell) {
+			if ($scope.$parent.currentUser.uid === upsell.userID || $scope.$parent.currentUser.admin) {
+				return true;
+			} else {
+				return false;
+			}
+		};
 
 	}
 ]);
