@@ -4,27 +4,97 @@
   <header><h5>Permitted View of Upsells</h5></header>
 	
 	<!-- ng-Repeat through upsells and display only those which meet access permission -->
- 	<ul class="collection" ng-repeat="upsell in upsells" ng-show="viewAllowed(upsell)" ng-init="upsell.closed = false">
+ 	<ul class="collapsible popout" data-collapsible="accordion">
 
-    <li class="collection-item">
+		<!-- ngRepeat li -->
+    <li class="hoverable" ng-repeat="upsell in upsells" ng-show="viewAllowed(upsell)" ng-init="upsell.closed = false">
+
+    <!-- Collapsible HEADER -->
+    <div class="collapsible-header">
+    	<i class="material-icons">filter_drama</i>
+			<span class="left">{{ upsell.AccountName }}</span>
+			<span class="right">Net ${{ upsell.NewMRR - upsell.PreviousMRR }}</span>
+			<span class="collapsiblePreview right" ng-if="upsell.closed">Closed</span>
+			<span class="collapsiblePreview right" ng-if="!upsell.closed">Open</span>
+  	</div>
+
+  	<!-- Collapsible BODY -->
+		<div class="collapsible-body">
+			<div class="row">
+				<div class="col s12">
+
+					<!-- Column 1: Account Basics -->
+					<div class="col s3">
+						<h6 class="center-align">Account Details</h6>
+						<div class="divider"></div>
+
+						<!-- Account Name -->
+			    	<div ng-click="editing = true" ng-hide="editing">Name: {{ upsell.AccountName }}</div>
+						<input ng-change="upsell.edited = true" ng-blur="editing = false;" ng-enter="editing = false;" ng-show="editing" ng-model="upsell.AccountName" class="editing-label" type="text" focus-on-show>
+
+						<!-- Account ID -->
+			    	<div ng-click="editing = true" ng-hide="editing">ID: {{ upsell.AccountID }}</div>
+						<input ng-change="upsell.edited = true" ng-blur="editing = false;" ng-enter="editing = false;" ng-show="editing" ng-model="upsell.AccountID" class="editing-label" type="text">						
+					</div>	
+
+					<!-- Column 2: Old Contract Info -->
+					<div class="col s3">
+						<h6 class="center-align">Previous Contract</h6>
+						<div class="divider"></div>
+
+						<!-- Previous contract ID -->
+				  	<div>ID: {{ upsell.PreviousContractID }}</div>
+
+						<!-- Previous MRR -->
+				  	<div>MRR: {{ upsell.PreviousMRR }}</div>
+
+					</div>
+					
+					<!-- Column 3: New Contract Info -->
+					<div class="col s3">
+						<h6 class="center-align">New Contract</h6>
+						<div class="divider"></div>
+
+						<!-- New Contract ID -->
+				  	<div>ID: {{ upsell.NewContractID }}</div>
+
+						<!-- New MRR -->
+				  	<div>MRR: {{ upsell.NewMRR }}</div>
+
+						<!-- Order ID -->
+				  	<div>Order #: {{ upsell.OrderID }}</div>
+
+						<!-- One Time Fee -->
+				  	<div>One Time Fee: {{ upsell.OneTimeFee }}</div>
+
+					</div>
+
+					<!-- Column 4: Closed Info -->
+					<div class="col s3">
+						<h6 class="center-align">Status Info</h6>
+						<div class="divider"></div>
+
+						<!-- Date Sent -->
+				  	<div>Date Sent: {{ upsell.DateSent }}</div>
+						<!-- Date Closed -->
+				  	<div>Date Closed: {{ upsell.DateClosed }}</div>
+						<!-- Closed Switch -->
+						<div>
+				      <input type="checkbox" id="upsellStatus" ng-model="upsell.closed">
+			      	<label for="upsellStatus" ng-if="upsell.closed">Closed</label>
+			      	<label for="upsellStatus" ng-if="!upsell.closed">Working</label>							
+						</div>
+
+
+						<button type="button" ng-show="upsell.edited" class="waves-effect waves-teal btn-flat" ng-click="editUpsell(upsell.id)">Save</button>
+
+						<button type="button" class="waves-effect waves-teal btn-flat" ng-click="deleteUpsell(upsell.id, $index)">Delete</button>
+					</div>
+
+				</div> <!-- End Main Column -->
+			</div> <!-- End Row -->
 			
-			<!-- Account Name -->
-    	<span ng-click="upsell.editing = true" ng-hide="upsell.editing">{{ upsell.AccountName }}</span>
-			<input ng-change="upsell.edited = true" ng-blur="upsell.editing = false;" ng-enter="upsell.editing = false;" ng-show="upsell.editing" ng-model="upsell.AccountName" class="editing-label" type="text" focus-on-show>
-
-			<!-- Account ID -->
-    	<span>{{ upsell.AccountID }}</span>
-    	<span>{{ upsell.PreviousContractID }}</span>
-
-    	<span class="right">
-	      <input type="checkbox" id="upsellStatus" class="filled-in" ng-model="upsell.closed">
-      	<label for="upsellStatus" ng-if="upsell.closed">Closed</label>
-      	<label for="upsellStatus" ng-if="!upsell.closed">Open</label>
-    	</span>
-			<!-- <input ng-model="upsell.closed" type="checkbox"> -->
-			<!-- <input ng-model="upsell.DateSent" type="date" class="datepicker"> -->
-			<button type="button" class="waves-effect waves-teal btn-flat right" ng-click="deleteUpsell(upsell.id, $index)">Delete</button>
-			<button type="button" ng-show="upsell.edited" class="waves-effect waves-teal btn-flat right" ng-click="editUpsell(upsell.id)">Save</button>
+		</div>
 		</li>
   </ul>
 

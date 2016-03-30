@@ -9,9 +9,14 @@ UpsellTracker.controller("UpsellCtrl",
 	"firebaseURL",
 
 	function ($scope, upsellsFactory, authFactory, $http, firebaseURL) {
+    // angular's version of jQuery $(document).ready()
+    angular.element(document).ready(function () {
+      $('.collapsible').collapsible({
+        accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+      });
+    });
 
-    $scope.jeff = "jeffrey!";
-
+    // scope upsell variable which holds all upsells passed from UpsellsFactory
     // use ng-show/hide or ng-if to display current user's data on partial
     $scope.upsells = [];
 
@@ -30,7 +35,6 @@ UpsellTracker.controller("UpsellCtrl",
     );
 
     $scope.addUpsell = function () {
-      console.log(`authFactory.getUserID: `, authFactory.getUserID);
       let userID = authFactory.getUserID();
     	let newUpsell = {
     		"userID": userID,
@@ -52,7 +56,7 @@ UpsellTracker.controller("UpsellCtrl",
     	$http.post(`${firebaseURL}/upsells.json`,
   			JSON.stringify(newUpsell)
   		).then(
-  			() => console.log(`Song Successfully Added!`),
+  			() => console.log(`Test Upsell Successfully Added!`),
   			(error) => console.log(`error: `, error)
   		);
     };
