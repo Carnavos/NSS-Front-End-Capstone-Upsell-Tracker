@@ -1,1 +1,11 @@
-// 
+// SASS!
+
+// Collapsible Previews
+span {
+	display: inline-block;
+}
+
+.collapsiblePreview:after {
+	content: " | ";
+}
+
