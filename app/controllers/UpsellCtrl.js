@@ -14,6 +14,8 @@ UpsellTracker.controller("UpsellCtrl",
       $('.collapsible').collapsible({
         accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
       });
+      // material modal setup
+      $('.modal-trigger').leanModal();
     });
 
     // scope upsell variable which holds all upsells passed from UpsellsFactory
@@ -25,6 +27,8 @@ UpsellTracker.controller("UpsellCtrl",
       upsellsObject => {
         Object.keys(upsellsObject).forEach(key => {
           upsellsObject[key].id = key;
+          // date reformatting
+          $scope.dateReformat(upsellsObject[key]);
           $scope.upsells.push(upsellsObject[key]);
         });
         $scope.$apply();
@@ -34,23 +38,83 @@ UpsellTracker.controller("UpsellCtrl",
       err => console.log(err)
     );
 
-    $scope.addUpsell = function () {
+    $scope.dateReformat = function (dateObject) {
+      dateObject.DateSent = new Date(dateObject.DateSent);
+      dateObject.DateClosed = new Date(dateObject.DateClosed);
+    };
+
+    $scope.addTestUpsell = function () {
       let userID = authFactory.getUserID();
-    	let newUpsell = {
-    		"userID": userID,
-  		  "CSM": "Greg Williams",
-	      "AccountName": "Globocom Inc",
-	      "AccountID": 111222,
-	      "PreviousContractID": 111112, 
-	      "PreviousMRR": 1500,
-	      "NewContractID": 111113,
-	      "NewMRR": 3000,
-	      "OrderID": 111113,
-        "DateSent": "2016-01-13",
-	      "Closed": true,
-	      "DateClosed": "2016-02-17",
-	      "Term": 12,
-	      "OneTimeFee": 0
+      let newUpsell = {
+        "userID": userID,
+        "CSM": "Greg Williams",
+        "AccountName": "Globocom Inc",
+        "AccountID": 111222,
+        "PreviousContractID": 111112, 
+        "PreviousMRR": 1500,
+        "NewContractID": 111113,
+        "NewMRR": 3000,
+        "OrderID": 111113,
+        "DateSent": "2016-01-13T06:00:00.000Z",
+        "Closed": true,
+        "DateClosed": "2016-02-17",
+        "Term": 12,
+        "OneTimeFee": 0
+      };
+
+      $http.post(`${firebaseURL}/upsells.json`,
+        JSON.stringify(newUpsell)
+      ).then(
+        () => console.log(`Test Upsell Successfully Added!`),
+        (error) => console.log(`error: `, error)
+      );
+    };
+
+    // $scope.newUpsell = {
+    // 		"userID": $scope.parent$.currentUser.uid,
+  		//   "CSM": $scope.parent$.currentUser.userName,
+	   //    "AccountName": "Globocom Inc",
+	   //    "AccountID": 111222,
+	   //    "PreviousContractID": 111112, 
+	   //    "PreviousMRR": 1500,
+	   //    "NewContractID": 111113,
+	   //    "NewMRR": 3000,
+	   //    "OrderID": 111113,
+    //     "DateSent": "2016-01-13T06:00:00.000Z",
+	   //    "Closed": true,
+	   //    "DateClosed": "2016-02-17",
+	   //    "Term": 12,
+	   //    "OneTimeFee": 0      
+    // };
+
+    $scope.addAccountName = "";
+    $scope.addAccountID = "";
+    $scope.addPreviousContractID = "";
+    $scope.addPreviousMRR = "";
+    $scope.addNewContractID = "";
+    $scope.addNewMRR = "";
+    $scope.addOrderID = "";
+    $scope.addDateSent = "";
+    $scope.addDateClosed = "";
+    $scope.addTerm = "";
+    $scope.addOneTimeFee = "";
+
+    $scope.addUpsell = function () {
+      let newUpsell = {
+        "userID": $parent.currentUser.uid,
+        "CSM": $parent.currentUser.userName,
+        "AccountName": $scope.addAccountName,
+        "AccountID": $scope.addAccountID,
+        "PreviousContractID": $scope.addPreviousContractID, 
+        "PreviousMRR": $scope.addPreviousMRR,
+        "NewContractID": $scope.addNewContractID,
+        "NewMRR": $scope.addNewMRR,
+        "OrderID": $scope.addOrderID,
+        "DateSent": $scope.addDateSent, // WILL NEED TO STRING METHOD
+        "Closed": false, // initialize as open, rep can close afterwards
+        "DateClosed": $scope.addDateClosed, // WILL NEED TO STRING METHOD
+        "Term": $scope.addTerm,
+        "OneTimeFee": $scope.addOneTimeFee
     	};
 
     	$http.post(`${firebaseURL}/upsells.json`,
