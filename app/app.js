@@ -1,4 +1,4 @@
-"use strict";
+  "use strict";
 
 let UpsellTracker = angular.module("UpsellTracker", ["ngRoute", "firebase", "ngMaterial", "ngMessages" ])
   .constant('firebaseURL', "https://tcupselltracker.firebaseio.com")
