@@ -9,3 +9,16 @@ span {
 	content: " | ";
 }
 
+// md-collapsible input elements
+
+.md-input-container {
+	margin-top: 5px;
+}
+
+.md-input {
+	margin-bottom: 0;
+}
+
+.closedUpsell {
+	@extend .blue, .lighten-4;
+}

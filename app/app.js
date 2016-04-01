@@ -1,6 +1,6 @@
 "use strict";
 
-let UpsellTracker = angular.module("UpsellTracker", ["ngRoute", "firebase"])
+let UpsellTracker = angular.module("UpsellTracker", ["ngRoute", "firebase", "ngMaterial", "ngMessages" ])
   .constant('firebaseURL', "https://tcupselltracker.firebaseio.com")
 
 // This directive allows us to pass a function in on an enter key to do what we want.
