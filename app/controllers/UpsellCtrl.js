@@ -236,6 +236,7 @@ UpsellTracker.controller("UpsellCtrl",
       .then(
         () => {
           console.log(`Upsell Updated Successfully`);
+          Materialize.toast("Upsell Updated Successfully", 3000, 'orange');
           // disable temporary save button
           editedUpsell.edited = false;
   			},

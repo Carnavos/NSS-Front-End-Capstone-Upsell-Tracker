@@ -1,30 +1,43 @@
 <div class="container">
-	<div class="row">
-		<div class="col s12 center-align">
-			<section>
-  			<h4>Login/Register</h4>
+	<form id="login" name="loginForm" class="signin-card">
+    <div class="row">
+      <div class="col s12 center-align">
+  
+          <h1 class="display1">Upsell Tracker</h1>
+  
+            <div class="row">
+    
+              <div ng-show="registerState" class="input-field col s10">
+                <i class="material-icons prefix">account_circle</i>
+                <input id="userNameInput" class="validate" name="userName" type="text" ng-required="registerState" ng-model="account.userName">
+                <label for="userNameInput">user name</label>
+                  <div ng-messages="loginForm.userName.$error" ng-show="loginForm.userName.$touched">
+                    <div ng-message="required">Required for new user</div>
+                  </div>
 
-        <div class="row">
-    			<div class="input-field col s6 offset-s3">
-      			<input id="userNameInput" class="validate center-align" type="text" ng-model="account.userName">
-            <label for="userNameInput">User Name:</label>
-          </div>
-          <div class="input-field col s6 offset-s3">
-            <input id="emailInput" class="validate center-align" type="email" autofocus="true" ng-model="account.email">
-            <label for="emailInput">Email:</label>
-          </div>
-          <div class="input-field col s6 offset-s3">
-            <input id="passwordInput" class="validate center-align" type="password" ng-model="account.password">
-            <label for="passwordInput">Password:</label>
-    			</div>
-        </div>
+              </div>
+              <div class="input-field col s10">
+                <i class="material-icons prefix">email</i>
+                <input id="emailInput" class="validate" type="email" autofocus="true" ng-model="account.email">
+                <label for="emailInput">email</label>
+              </div>
+              <div class="input-field col s10">
+                <i class="material-icons prefix">lock</i>
+                <input id="passwordInput" class="validate" type="password" ng-model="account.password">
+                <label for="passwordInput">password</label>
+              </div>
 
-        <div class="row">
-    			<button class="waves-effect waves-light btn" ng-click="login()">Login</button>
-    			<button class="waves-effect waves-light btn" ng-click="register()">Register</button>
-        </div>
+            </div>
 
-			</section>
-		</div>
-	</div>
+            <button class="waves-effect waves-light btn" ng-click="registerState? register() : login()">{{ registerState? "Register" : "Login" }}
+            </button>
+
+            <div class="display2 center-align">
+              <a class="" ng-show="!registerState" ng-click="registerState = true">Create Account</a>
+              <a class="" ng-show="registerState" ng-click="registerState = false">Back</a>
+            </div>
+            
+      </div>
+    </div>
+	</form>
 </div>

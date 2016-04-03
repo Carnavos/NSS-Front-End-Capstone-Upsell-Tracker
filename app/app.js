@@ -87,6 +87,6 @@ UpsellTracker.config(["$routeProvider",
         controller: "LoginCtrl"
       }).
       otherwise({
-        redirectTo: "/"
+        redirectTo: "/login"
       });
   }]);
