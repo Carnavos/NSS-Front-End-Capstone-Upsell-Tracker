@@ -6,7 +6,7 @@ UpsellTracker.controller("UpsellCtrl",
 	"upsellsFactory",
 	"authFactory",
 	"$http",
-	"firebaseURL",
+  "firebaseURL",
 
 	function ($scope, upsellsFactory, authFactory, $http, firebaseURL) {
     // angular's version of jQuery $(document).ready()
@@ -115,6 +115,7 @@ UpsellTracker.controller("UpsellCtrl",
           newUpsell.id = response.data.name;
           $scope.dateReformat(newUpsell);
           $scope.upsells.push(newUpsell);
+          Materialize.toast("Upsell Added Successfully", 3000, 'green');
         },
         (error) => console.log(`error: `, error)
       );
@@ -197,6 +198,9 @@ UpsellTracker.controller("UpsellCtrl",
           let deletedUpsellIndex = $scope.upsells.indexOf(deletedUpsell);
           $scope.upsells.splice(deletedUpsellIndex, 1);
           console.log(`$scope.upsells after delete: `, $scope.upsells);
+          // $scope.simpleToast("Upsell Deleted Successfully");
+          Materialize.toast("Upsell Deleted Successfully", 3000, 'red');
+
         },
         rej => console.log(`Delete Error`, rej)
       );
