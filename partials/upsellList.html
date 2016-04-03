@@ -188,9 +188,12 @@
   </ul>
 
 	<div>
-		<button type="button" ng-click="addTestUpsell()">Add Test Upsell</button>
+		<button type="button" class="waves-effect waves-light indigo darken-4" ng-click="addTestUpsell()">Add Test Upsell</button>
+
+		<button type="button" class="waves-effect waves-light blue darken-3" ng-csv="getUpsells()" filename="export.csv" csv-header="getHeaders()">Export</button>
+
 	</div>
 
-	<button class="btn-floating btn-large waves-effect waves-light teal" ng-click="addUpsellLocal()"><i class="material-icons">add</i><md-tooltip md-direction="right">Add Upsell</md-tooltip></button>
+	<button class="btn-floating btn-large waves-effect waves-light teal right" ng-click="addUpsellLocal()"><i class="material-icons">add</i><md-tooltip md-direction="right">Add Upsell</md-tooltip></button>
 
 </article>
