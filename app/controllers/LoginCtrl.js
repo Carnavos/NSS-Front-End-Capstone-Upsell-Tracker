@@ -12,6 +12,8 @@ UpsellTracker.controller("LoginCtrl",
     // Variables on $scope for use in DOM
     $scope.account = { email: "", password: "", userName: "" };
 
+    $scope.registerState = false;
+
     /*
       Attempt to register a new user account.
       If successful, attempts to store user in Firebase (with additional account details), then logs user in.
@@ -32,6 +34,7 @@ UpsellTracker.controller("LoginCtrl",
           () => {
             console.log(`User Stored Successfully!`);
             // login (does not depend on storeUser)
+            Materialize.toast(`Register Successful, Welcome ${$scope.account.userName}!`, 5000, 'green');
             $scope.login();
           },
           // storeUser error
