@@ -15,7 +15,7 @@
 			<span class="left">{{ upsell.AccountName }}</span>
 			<span class="left">{{ $index }}</span>
 			<span class="left" ng-show="!upsell.AccountName">NEW UPSELL</span>
-			<span class="right">Net ${{ upsell.NewMRR - upsell.PreviousMRR }}</span>
+			<span class="right">Net Gain: ${{ upsell.NewMRR - upsell.PreviousMRR }}</span>
 			<span class="collapsiblePreview right" ng-if="upsell.closed">Closed</span>
 			<span class="collapsiblePreview right" ng-if="!upsell.closed">Open</span>
   	</div>
@@ -75,7 +75,7 @@
 						<!-- Previous MRR -->
 						<div class="col s12">
 							<md-input-container class="md-block">
-				        <label>Previous MRR</label>
+				        <label>Previous MRR (USD)</label>
 				        <input ng-pattern="/^[0-9]*$/" required md-no-asterisk="" name="PreviousMRR" ng-model="upsell.PreviousMRR" ng-change="upsell.edited = true">
 				        <div ng-messages="testForm.PreviousMRR.$error" ng-show="testForm.PreviousMRR.$touched">
 				          <div ng-message="required">This is required.</div>
@@ -96,10 +96,10 @@
 						<div class="col s6">
 							<md-input-container class="md-block">
 				        <label>New Contract ID</label>
-				        <input ng-pattern="/^[0-9]{6}$/" required md-no-asterisk="" name="NewContractID" ng-model="upsell.NewContractID" ng-change="upsell.edited = true">
-				        <div ng-messages="testForm.NewContractID.$error">
-				          <div ng-message="required">This is required.</div>
+				        <input ng-pattern="/^[0-9]{6}$/" name="NewContractID" ng-model="upsell.NewContractID" ng-change="upsell.edited = true" ensure-expression="{ greaterThanOld: upsell.NewContractID ? upsell.NewContractID > upsell.PreviousContractID : true }" ng-model-options="{allowInvalid:true}">
+				        <div ng-messages="testForm.NewContractID.$error" ng-show="testForm.NewContractID.$touched">
 				          <div ng-message="pattern">Must be 6 digits.</div>
+				          <div ng-message="greaterThanOld">New Contract ID must be greater than Previous Contract ID.</div>
 				        </div>
 				      </md-input-container>
 						</div>
@@ -108,10 +108,10 @@
 						<div class="col s6">
 							<md-input-container class="md-block">
 				        <label>Order ID</label>
-				        <input ng-pattern="/^[0-9]{7}$/" required md-no-asterisk="" name="OrderID" ng-model="upsell.OrderID" ng-change="upsell.edited = true">
+				        <input ng-pattern="/^[0-9]{7}$/" ng-required="upsell.NewContractID" md-no-asterisk="" name="OrderID" ng-model="upsell.OrderID" ng-change="upsell.edited = true">
 				        <div ng-messages="testForm.OrderID.$error" ng-show="testForm.OrderID.$touched">
-				          <div ng-message="required">This is required.</div>
-				          <div ng-message="pattern">Must be a 7 digit number.</div>
+				          <div ng-message="required">Order ID required with New Contract</div>
+				          <div ng-message="pattern">Must be a 7 digit number</div>
 				        </div>
 				      </md-input-container>
 						</div>
@@ -119,11 +119,11 @@
 						<!-- New MRR -->
 						<div class="col s6">
 							<md-input-container class="md-block">
-				        <label>New MRR</label>
-				        <input ng-pattern="/^[0-9]*$/" required md-no-asterisk="" name="NewMRR" ng-model="upsell.NewMRR" ng-change="upsell.edited = true">
+				        <label>New MRR (USD)</label>
+				        <input ng-pattern="/^[0-9]*$/" ng-required="upsell.NewContractID" name="NewMRR" ng-model="upsell.NewMRR" ng-change="upsell.edited = true" ensure-expression="{}">
 				        <div ng-messages="testForm.NewMRR.$error" ng-show="testForm.NewMRR.$touched">
-				          <div ng-message="required">This is required.</div>
-				          <div ng-message="pattern">Must be a number.</div>
+				          <div ng-message="pattern">Must be a number</div>
+				          <div ng-message="required">New MRR required with New Contract</div>
 				        </div>
 				      </md-input-container>
 						</div>
@@ -132,10 +132,9 @@
 						<div class="col s6">
 							<md-input-container class="md-block">
 				        <label>One Time Fee</label>
-				        <input ng-pattern="/^[0-9]*$/" required md-no-asterisk="" name="OneTimeFee" ng-model="upsell.OneTimeFee" ng-change="upsell.edited = true">
+				        <input ng-pattern="/^[0-9]*$/" md-no-asterisk="" name="OneTimeFee" ng-model="upsell.OneTimeFee" ng-change="upsell.edited = true">
 				        <div ng-messages="testForm.OneTimeFee.$error" ng-show="testForm.OneTimeFee.$touched">
-				          <div ng-message="required">This is required.</div>
-				          <div ng-message="pattern">Must be a number.</div>
+				          <div ng-message="pattern">Must be a valid number.</div>
 				        </div>
 				      </md-input-container>
 						</div>
@@ -171,9 +170,9 @@
 						<!-- Save/Delete Buttons -->
 						<div class="col s12">
 							<!-- Save button updates already posted upsells -->
-							<button type="button" ng-show="upsell.edited && upsell.id" class="waves-effect waves-teal btn-flat" ng-click="editUpsell(upsell.id)">Save</button>
+							<button type="button" ng-show="upsell.edited && upsell.id" class="waves-effect waves-teal btn-flat" ng-click="editUpsell(upsell.id)"  ng-class="{ 'disabled': testForm.$invalid }" ng-disabled="testForm.$invalid">Save</button>
 							<!-- Add button adds DOM only new upsell -->
-							<button type="button" ng-show="!upsell.id" class="waves-effect waves-teal btn-flat" ng-click="addUpsell(upsell)">Add</button>
+							<button type="button" ng-show="!upsell.id" class="waves-effect waves-teal btn-flat" ng-click="addUpsell(upsell)" ng-disabled="testForm.$invalid">Add</button>
 
 							<button type="button" ng-show="upsell.id" class="waves-effect waves-teal btn-flat" ng-click="deleteUpsell(upsell.id)">Delete</button>
 							<button type="button" ng-show="!upsell.id" class="waves-effect waves-teal btn-flat" ng-click="cancelAdd($index)">Cancel</button>
@@ -192,57 +191,6 @@
 		<button type="button" ng-click="addTestUpsell()">Add Test Upsell</button>
 	</div>
 
-	<button class="btn-floating btn-large waves-effect waves-light blue modal-trigger" data-target="upsellModal"><i class="material-icons">add</i></button>
-	<!-- Test Upsell Add Button for Add WITHOUT Modal -->
 	<button class="btn-floating btn-large waves-effect waves-light teal" ng-click="addUpsellLocal()"><i class="material-icons">add</i></button>
 
-	<!-- ADD UPSELL MODAL -->
-  <div id="upsellModal" class="modal modal-fixed-footer">
-    <div class="modal-content">
-      <h4 class="center-align">Add Upsell</h4>
-
-			<!-- Upsell Guidelines -->
-      <div> 
-      	<h6>Guidelines</h6>
-      	<ol>
-      		<li>Previous Contract ID, New Contract ID and Order Number should all be different</li>
-      		<li>If Net New, Previous Contract section should be blank (Contract ID and MRR)</li>
-      		<li>Date Closed must be after Date Sent</li>
-      	</ol>
-      </div>
-
-			<!-- Upsell Fields -->
-    	<h6>Upsell Fields</h6>
-			<div>
-				<ol>
-			    <li>addAccountName: {{addAccountName}}</li>
-			    <li>addAccountID: {{addAccountID}}</li>
-			    <li>addPreviousContractID: {{addPreviousContractID}}</li>
-			    <li>addPreviousMRR: {{addPreviousMRR}}</li>
-			    <li>addNewContractID: {{addNewContractID}}</li>
-			    <li>addNewMRR: {{addNewMRR}}</li>
-			    <li>addOrderID: {{addOrderID}}</li>
-			    <li>addDateSent: {{addDateSent}}</li>
-			    <li>addDateClosed: {{addDateClosed}}</li>
-			    <li>addTerm: {{addTerm}}</li>
-			    <li>addOneTimeFee: {{addOneTimeFee}}</li>
-				</ol>
-			</div>
-  </div> <!-- End Add Upsell Modal-->
-
-
 </article>
-
-<div class="item" ng-class="{'editing-item': editing, 'edited': todo.edited, 'completed': todo.completed}" 
-      ng-repeat="todo in todos | orderBy: 'completed'" ng-init="todo.completed = false">
-	<input ng-model="todo.completed" type="checkbox"/>
-	<span ng-click="todo.completed = !todo.completed; todo.edited"></span>
-	<label ng-click="editing = true" ng-hide="editing" ng-click="helloWorld()">
-	  {{todo.name}}</label>
-	<input ng-change="todo.edited = true" ng-blur="editing = false;" ng-show="editing" ng-model="todo.name" class="editing-label" type="text"/>
-	<div class="actions">
-	  <a href="" ng-click="editing = !editing">Edit</a>
-	  <a href="" ng-click="saveTodos(todo)">Save</a>
-	  <a href="" ng-click="deleteTodo(todo, $index)"  class="Delete">delete</a>
-	</div>
-</div>
