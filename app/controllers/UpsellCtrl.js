@@ -40,6 +40,16 @@ UpsellTracker.controller("UpsellCtrl",
       err => console.log(err)
     );
 
+    // CSV Export functions
+    $scope.getUpsells = function () {
+      console.log(`getUpsells run`);
+      return $scope.upsells;
+    }
+
+    $scope.getHeaders = function () {
+      return Object.keys($scope.upsells[0]);
+    }
+
     $scope.dateReformat = function (dateObject) {
       dateObject.DateSent = new Date(dateObject.DateSent);
       dateObject.DateClosed = new Date(dateObject.DateClosed);
