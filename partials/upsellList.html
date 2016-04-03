@@ -172,7 +172,7 @@
 							<!-- Save button updates already posted upsells -->
 							<button type="button" ng-show="upsell.edited && upsell.id" class="waves-effect waves-teal btn-flat" ng-click="editUpsell(upsell.id)"  ng-class="{ 'disabled': testForm.$invalid }" ng-disabled="testForm.$invalid">Save</button>
 							<!-- Add button adds DOM only new upsell -->
-							<button type="button" ng-show="!upsell.id" class="waves-effect waves-teal btn-flat" ng-click="addUpsell(upsell)" ng-disabled="testForm.$invalid">Add</button>
+							<button type="button" ng-show="!upsell.id" class="waves-effect waves-teal btn-flat" ng-click="addUpsell(upsell)" ng-disabled="testForm.$invalid" data-delay="100" data-tooltip="Add to Upsell Database">Add</button>
 
 							<button type="button" ng-show="upsell.id" class="waves-effect waves-teal btn-flat" ng-click="deleteUpsell(upsell.id)">Delete</button>
 							<button type="button" ng-show="!upsell.id" class="waves-effect waves-teal btn-flat" ng-click="cancelAdd($index)">Cancel</button>
@@ -191,6 +191,6 @@
 		<button type="button" ng-click="addTestUpsell()">Add Test Upsell</button>
 	</div>
 
-	<button class="btn-floating btn-large waves-effect waves-light teal" ng-click="addUpsellLocal()"><i class="material-icons">add</i></button>
+	<button class="btn-floating btn-large waves-effect waves-light teal" ng-click="addUpsellLocal()"><i class="material-icons">add</i><md-tooltip md-direction="right">Add Upsell</md-tooltip></button>
 
 </article>
