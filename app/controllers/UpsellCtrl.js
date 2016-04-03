@@ -61,7 +61,8 @@ UpsellTracker.controller("UpsellCtrl",
         "closed": false, // initialize as open, rep can close afterwards
         "DateClosed": $scope.addDateClosed, // WILL NEED TO STRING METHOD
         "Term": $scope.addTerm,
-        "OneTimeFee": $scope.addOneTimeFee
+        "OneTimeFee": $scope.addOneTimeFee,
+        "isNew": true
       };
 
       $scope.upsells.push(newUpsell);
@@ -70,22 +71,22 @@ UpsellTracker.controller("UpsellCtrl",
 
     };
 
-      $scope.testUpsell = {
-        "userID": authFactory.getUserID(),
-        "CSM": "Jeff Williams",
-        "AccountName": "Globocom Inc",
-        "AccountID": 111222,
-        "PreviousContractID": 111112, 
-        "PreviousMRR": 1500,
-        "NewContractID": 111113,
-        "NewMRR": 3000,
-        "OrderID": 111113,
-        "DateSent": "2016-01-13T06:00:00.000Z",
-        "closed": false,
-        "DateClosed": "2016-02-17T06:00:00.000Z",
-        "Term": 12,
-        "OneTimeFee": 0
-      };
+    $scope.testUpsell = {
+      "userID": authFactory.getUserID(),
+      "CSM": "Jeff Williams",
+      "AccountName": "Globocom Inc",
+      "AccountID": 111222,
+      "PreviousContractID": 111112, 
+      "PreviousMRR": 1500,
+      "NewContractID": 111113,
+      "NewMRR": 3000,
+      "OrderID": 111113,
+      "DateSent": "2016-01-13T06:00:00.000Z",
+      "closed": false,
+      "DateClosed": "2016-02-17T06:00:00.000Z",
+      "Term": 12,
+      "OneTimeFee": 0
+    };
 
     $scope.addTestUpsell = function () {
       let userID = authFactory.getUserID();
