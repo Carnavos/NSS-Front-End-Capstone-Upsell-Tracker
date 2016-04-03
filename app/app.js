@@ -1,6 +1,6 @@
   "use strict";
 
-let UpsellTracker = angular.module("UpsellTracker", ["ngRoute", "firebase", "ngMaterial", "ngMessages" ])
+let UpsellTracker = angular.module("UpsellTracker", ["ngRoute", "firebase", "ngMaterial", "ngMessages", "ui.validate" ])
   .constant('firebaseURL', "https://tcupselltracker.firebaseio.com")
 
 // This directive allows us to pass a function in on an enter key to do what we want.
@@ -17,6 +17,20 @@ let UpsellTracker = angular.module("UpsellTracker", ["ngRoute", "firebase", "ngM
         });
     };
 })
+// copy pasted validator test directive
+.directive('ensureExpression', ['$parse', function($parse) {
+  return {
+    require: 'ngModel',
+    link: function(scope, ele, attrs, ngModelController) {
+      scope.$watch(attrs.ngModel, function(value) {
+        let expressionResults = $parse(attrs.ensureExpression)(scope);
+        for (let expressionName in expressionResults) {
+          ngModelController.$setValidity(expressionName, expressionResults[expressionName]);
+        }
+      });
+    }
+  };
+}])
 // autofocus directive for editing fields (not angular native)
 .directive('focusOnShow', function($timeout) {
     return {

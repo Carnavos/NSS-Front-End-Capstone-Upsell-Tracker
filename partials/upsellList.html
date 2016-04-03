@@ -96,10 +96,11 @@
 						<div class="col s6">
 							<md-input-container class="md-block">
 				        <label>New Contract ID</label>
-				        <input ng-pattern="/^[0-9]{6}$/" required md-no-asterisk="" name="NewContractID" ng-model="upsell.NewContractID" ng-change="upsell.edited = true">
-				        <div ng-messages="testForm.NewContractID.$error">
-				          <div ng-message="required">This is required.</div>
+				        <input ng-pattern="/^[0-9]{6}$/" name="NewContractID" ng-model="upsell.NewContractID" ng-change="upsell.edited = true" ensure-expression="{ greaterThanOld: upsell.NewContractID > upsell.PreviousContractID, newMRRCheck: testForm.NewMRR.$valid }">
+				        <div ng-messages="testForm.NewContractID.$error" ng-show="testForm.NewContractID.$touched">
 				          <div ng-message="pattern">Must be 6 digits.</div>
+				          <div ng-message="greaterThanOld">New Contract ID must be greater than Previous Contract ID.</div>
+				          <div ng-message="newMRRCheck">Valid New MRR must be present with New Contract.</div>
 				        </div>
 				      </md-input-container>
 						</div>
@@ -120,10 +121,10 @@
 						<div class="col s6">
 							<md-input-container class="md-block">
 				        <label>New MRR</label>
-				        <input ng-pattern="/^[0-9]*$/" required md-no-asterisk="" name="NewMRR" ng-model="upsell.NewMRR" ng-change="upsell.edited = true">
+				        <input ng-pattern="/^[0-9]*$/" required name="NewMRR" ng-model="upsell.NewMRR" ng-change="upsell.edited = true" ensure-expression="{}">
 				        <div ng-messages="testForm.NewMRR.$error" ng-show="testForm.NewMRR.$touched">
-				          <div ng-message="required">This is required.</div>
 				          <div ng-message="pattern">Must be a number.</div>
+				          <div ng-message="required">Required</div>
 				        </div>
 				      </md-input-container>
 						</div>
@@ -171,7 +172,7 @@
 						<!-- Save/Delete Buttons -->
 						<div class="col s12">
 							<!-- Save button updates already posted upsells -->
-							<button type="button" ng-show="upsell.edited && upsell.id" class="waves-effect waves-teal btn-flat" ng-click="editUpsell(upsell.id)">Save</button>
+							<button type="button" ng-show="upsell.edited && upsell.id" class="waves-effect waves-teal btn-flat" ng-click="editUpsell(upsell.id)"  ng-class="{ 'disabled': testForm.$invalid }" ng-disabled="testForm.$invalid">Save</button>
 							<!-- Add button adds DOM only new upsell -->
 							<button type="button" ng-show="!upsell.id" class="waves-effect waves-teal btn-flat" ng-click="addUpsell(upsell)">Add</button>
 
@@ -192,8 +193,6 @@
 		<button type="button" ng-click="addTestUpsell()">Add Test Upsell</button>
 	</div>
 
-	<button class="btn-floating btn-large waves-effect waves-light blue modal-trigger" data-target="upsellModal"><i class="material-icons">add</i></button>
-	<!-- Test Upsell Add Button for Add WITHOUT Modal -->
 	<button class="btn-floating btn-large waves-effect waves-light teal" ng-click="addUpsellLocal()"><i class="material-icons">add</i></button>
 
 	<!-- ADD UPSELL MODAL -->
