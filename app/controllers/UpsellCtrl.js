@@ -65,6 +65,7 @@ UpsellTracker.controller("UpsellCtrl",
       return Object.keys($scope.upsells[0]);
     }
 
+    // date reformatting into Date instances
     $scope.dateReformat = function (dateObject) {
       dateObject.DateSent = new Date(dateObject.DateSent);
       dateObject.DateClosed = new Date(dateObject.DateClosed);
