@@ -1,62 +1,7 @@
   "use strict";
 
 let UpsellTracker = angular.module("UpsellTracker", ["ngRoute", "firebase", "ngMaterial", "ngMessages", "ui.validate", "ngSanitize", "ngCsv" ])
-  .constant('firebaseURL', "https://tcupselltracker.firebaseio.com")
-
-// enter keypress directive
-.directive('ngEnter', function () {
-    return function (scope, element, attrs) {
-        element.bind("keydown keypress", function (event) {
-            if(event.which === 13) {
-                scope.$apply(function (){
-                  scope.$eval(attrs.ngEnter);
-                });
- 
-                event.preventDefault();
-            }
-        });
-    };
-})
-// validation directive
-.directive('ensureExpression', ['$parse', function($parse) {
-  return {
-    require: 'ngModel',
-    link: function(scope, ele, attrs, ngModelController) {
-      scope.$watch(attrs.ngModel, function(value) {
-        let expressionResults = $parse(attrs.ensureExpression)(scope);
-        for (let expressionName in expressionResults) {
-          ngModelController.$setValidity(expressionName, expressionResults[expressionName]);
-        }
-      });
-    }
-  };
-}])
-// autofocus directive for editing fields (not angular native)
-.directive('focusOnShow', function($timeout) {
-    return {
-      restrict: 'A',
-      link: function($scope, $element, $attr) {
-        if ($attr.ngShow){
-          $scope.$watch($attr.ngShow, function(newValue){
-              if(newValue){
-                  $timeout(function(){
-                    $element[0].focus();
-                  }, 0);
-              }
-          });      
-        }
-        if ($attr.ngHide){
-            $scope.$watch($attr.ngHide, function(newValue){
-                if(!newValue){
-                    $timeout(function(){
-                        $element[0].focus();
-                    }, 0);
-                }
-            });      
-        }
-      }
-    };
-});
+  .constant('firebaseURL', "https://tcupselltracker.firebaseio.com");
 
 /*
   Define a promise for any view that needs an authenticated user
