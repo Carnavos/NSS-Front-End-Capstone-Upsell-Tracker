@@ -93,7 +93,7 @@ UpsellTracker.controller("UpsellCtrl",
 
       $scope.upsells.push(newUpsell);
       // expands all collapsibles with newUpsellStyle class (should be one at all times)
-      $scope.expandNew();
+      setTimeout(function(){ $scope.expandNew(); }, 0);
     };
 
     $scope.addTestUpsell = function () {
