@@ -1,32 +1,43 @@
-<article>
+<article class="upsellList container">
+{{ filterOption }}
 
-  <header><h5>User: {{ $parent.currentUser.userName }}</h5></header>
-  <header><h5>Permitted View of Upsells</h5></header>
-	
+  <div class="row">
+    <div class="col s12 tabs">
+      <ul class="tabs">
+				<li class="tab col s3"><a ng-click="filterOption = 'AccountName'"><i class="dropdownIcons tiny material-icons">sort_by_alpha</i>Account Name</a></li>
+				<li class="tab col s3"><a ng-click="filterOption = 'closed'"><i class="dropdownIcons tiny material-icons">thumb_up</i>Status</a></li>
+				<li class="tab col s3"><a ng-click="filterOption = 'CSM'"><i class="dropdownIcons tiny material-icons">contacts</i>CSM</a></li>
+				<li class="tab col s3" ng-show="$parent.currentUser.admin"><a ng-click="filterOption = '-NewMRR'"><i class="dropdownIcons tiny material-icons">toll</i>MRR</a></li>
+      </ul>
+    </div>
+  </div>	
+
 	<!-- ng-Repeat through upsells and display only those which meet access permission -->
- 	<ul class="collapsible popout" data-collapsible="accordion">
+ 	<ul class="collapsible popout upsellList" data-collapsible="accordion">
 
 		<!-- ngRepeat li -->
-    <li class="hoverable" ng-repeat="upsell in upsells | orderBy: 'closed'" ng-show="viewAllowed(upsell)">
+    <li class="hoverable" ng-repeat="upsell in upsells | orderBy: filterOption" ng-class="{'newUpsellStyle': upsell.isNew}" ng-if="viewAllowed(upsell)">
 
-    <!-- Collapsible HEADER -->
-    <div class="collapsible-header" ng-class="{ 'blue': upsell.closed }">
+    <div class="collapsible-header" ng-class="{ 'blue': upsell.closed, 'orange': upsell.edited, 'newUpsellStyle': upsell.isNew }">
     	<i class="material-icons">filter_drama</i>
-			<span class="left">{{ upsell.AccountName }}</span>
-			<span class="left">{{ $index }}</span>
-			<span class="left" ng-show="!upsell.AccountName">NEW UPSELL</span>
-			<span class="right">Net Gain: ${{ upsell.NewMRR - upsell.PreviousMRR }}</span>
+			<span ng-if="$parent.currentUser.admin" class="collapsiblePreview left">{{ upsell.CSM }}</span>
+			<span class="collapsiblePreview left">{{ upsell.AccountName }}</span>
+			<!-- <span class="collapsiblePreview left">{{ $index }}</span> -->
+			<span class="collapsiblePreview left" ng-show="!upsell.AccountName">New Upsell</span>
+			<span class="center-align" ng-show="upsell.edited">[ UNSAVED ]</span>
+			<span class="right">Net: {{ upsell.NewMRR - upsell.PreviousMRR | currency }}</span>
 			<span class="collapsiblePreview right" ng-if="upsell.closed">Closed</span>
 			<span class="collapsiblePreview right" ng-if="!upsell.closed">Open</span>
   	</div>
 
   	<!-- Collapsible BODY -->
+		<!-- <div class="collapsible-body" ng-class="{'newUpsellStyle': upsell.isNew}">  -->
 		<div class="collapsible-body"> 
-			<form class="row center-align" name="testForm"> <!-- temp change to a Form -->
+			<form class="row center-align" name="testForm">
 				<div class="col s12">
 
 					<!-- Column 1: Account Basics -->
-					<div class="col s2 offset-s1">
+					<div class="col s2">
 						<h6 class="center-align">Account Details</h6>
 						<div class="divider"></div>
 
@@ -63,7 +74,7 @@
 						<!-- Column 2: Old Contract Info -->
 						<div class="col s12">
 							<md-input-container class="md-block">
-				        <label>Previous Contract ID</label>
+				        <label>Contract ID</label>
 				        <input ng-pattern="/^[0-9]{6}$/" required md-no-asterisk="" name="PreviousContractID" ng-model="upsell.PreviousContractID" ng-change="upsell.edited = true">
 				        <div ng-messages="testForm.PreviousContractID.$error">
 				          <div ng-message="required">This is required.</div>
@@ -95,7 +106,7 @@
 						<!-- New Contract ID -->
 						<div class="col s6">
 							<md-input-container class="md-block">
-				        <label>New Contract ID</label>
+				        <label>Contract ID</label>
 				        <input ng-pattern="/^[0-9]{6}$/" name="NewContractID" ng-model="upsell.NewContractID" ng-change="upsell.edited = true" ensure-expression="{ greaterThanOld: upsell.NewContractID ? upsell.NewContractID > upsell.PreviousContractID : true }" ng-model-options="{allowInvalid:true}">
 				        <div ng-messages="testForm.NewContractID.$error" ng-show="testForm.NewContractID.$touched">
 				          <div ng-message="pattern">Must be 6 digits.</div>
@@ -120,7 +131,7 @@
 						<div class="col s6">
 							<md-input-container class="md-block">
 				        <label>New MRR (USD)</label>
-				        <input ng-pattern="/^[0-9]*$/" ng-required="upsell.NewContractID" name="NewMRR" ng-model="upsell.NewMRR" ng-change="upsell.edited = true" ensure-expression="{}">
+				        <input ng-pattern="/^[0-9]*$/" ng-required="upsell.NewContractID" name="NewMRR" ng-model="upsell.NewMRR" ng-change="upsell.edited = true">
 				        <div ng-messages="testForm.NewMRR.$error" ng-show="testForm.NewMRR.$touched">
 				          <div ng-message="pattern">Must be a number</div>
 				          <div ng-message="required">New MRR required with New Contract</div>
@@ -142,7 +153,7 @@
 					</div>
 
 					<!-- Column 4: Closed Info -->
-					<div class="col s2">
+					<div class="col s4">
 						<h6 class="center-align">Upsell Status</h6>
 						<div class="divider"></div>
 						
@@ -175,7 +186,7 @@
 							<button type="button" ng-show="!upsell.id" class="waves-effect waves-teal btn-flat" ng-click="addUpsell(upsell)" ng-disabled="testForm.$invalid" data-delay="100" data-tooltip="Add to Upsell Database">Add</button>
 
 							<button type="button" ng-show="upsell.id" class="waves-effect waves-teal btn-flat" ng-click="deleteUpsell(upsell.id)">Delete</button>
-							<button type="button" ng-show="!upsell.id" class="waves-effect waves-teal btn-flat" ng-click="cancelAdd($index)">Cancel</button>
+							<button type="button" ng-show="!upsell.id" class="waves-effect waves-teal btn-flat" ng-click="cancelAdd($$hashKey)">Cancel</button>
 						</div>
 						{{ upsell | json }}
 					</div>
@@ -188,12 +199,13 @@
   </ul>
 
 	<div>
+		<button type="button" class="waves-effect waves-light white" ng-click="expandNew()">Expand New</button>
 		<button type="button" class="waves-effect waves-light indigo darken-4" ng-click="addTestUpsell()">Add Test Upsell</button>
 
 		<button type="button" class="waves-effect waves-light blue darken-3" ng-csv="getUpsells()" filename="export.csv" csv-header="getHeaders()">Export</button>
 
 	</div>
 
-	<button class="btn-floating btn-large waves-effect waves-light teal right" ng-click="addUpsellLocal()"><i class="material-icons">add</i><md-tooltip md-direction="right">Add Upsell</md-tooltip></button>
+	<button class="fab btn-floating btn-large waves-effect waves-light teal right" ng-click="addUpsellLocal()"><i class="material-icons">add</i><md-tooltip md-direction="top">Add Upsell</md-tooltip></button>
 
 </article>

@@ -18,18 +18,18 @@
               </div>
               <div class="input-field col s10">
                 <i class="material-icons prefix">email</i>
-                <input id="emailInput" class="validate" type="email" autofocus="true" ng-model="account.email">
+                <input id="emailInput" class="validate" type="email" required autofocus="true" ng-model="account.email">
                 <label for="emailInput">email</label>
               </div>
               <div class="input-field col s10">
                 <i class="material-icons prefix">lock</i>
-                <input id="passwordInput" class="validate" type="password" ng-model="account.password">
+                <input id="passwordInput" class="validate" type="password" required ng-model="account.password">
                 <label for="passwordInput">password</label>
               </div>
 
             </div>
 
-            <button class="waves-effect waves-light btn" ng-click="registerState? register() : login()">{{ registerState? "Register" : "Login" }}
+            <button ng-disabled="loginForm.$invalid" class="waves-effect waves-light btn" ng-click="registerState? register() : login()">{{ registerState? "Register" : "Login" }}
             </button>
 
             <div class="display2 center-align">

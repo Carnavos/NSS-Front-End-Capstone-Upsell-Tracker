@@ -3,7 +3,7 @@
 let UpsellTracker = angular.module("UpsellTracker", ["ngRoute", "firebase", "ngMaterial", "ngMessages", "ui.validate", "ngSanitize", "ngCsv" ])
   .constant('firebaseURL', "https://tcupselltracker.firebaseio.com")
 
-// This directive allows us to pass a function in on an enter key to do what we want.
+// enter keypress directive
 .directive('ngEnter', function () {
     return function (scope, element, attrs) {
         element.bind("keydown keypress", function (event) {
@@ -17,7 +17,7 @@ let UpsellTracker = angular.module("UpsellTracker", ["ngRoute", "firebase", "ngM
         });
     };
 })
-// copy pasted validator test directive
+// validation directive
 .directive('ensureExpression', ['$parse', function($parse) {
   return {
     require: 'ngModel',
