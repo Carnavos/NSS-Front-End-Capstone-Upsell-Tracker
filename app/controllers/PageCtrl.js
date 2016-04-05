@@ -36,7 +36,7 @@ UpsellTracker.controller("PageCtrl",
           error => console.log("Page Ctrl Pull User Error: ", error)
         );
       } else {
-        console.log(`ya boy ain't authenticated yet bruh`);
+        console.log(`Not Authenticated Yet`);
       }
 
 	}

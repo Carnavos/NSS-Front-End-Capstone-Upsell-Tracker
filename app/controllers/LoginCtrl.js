@@ -4,7 +4,6 @@ UpsellTracker.controller("LoginCtrl",
 [
   "$scope",
   "$location",
-  // used to have "$http" here
   "authFactory",
 
   function ($scope, $location, authFactory)  {
