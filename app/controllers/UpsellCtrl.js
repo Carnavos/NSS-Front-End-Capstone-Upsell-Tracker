@@ -24,11 +24,11 @@ UpsellTracker.controller("UpsellCtrl",
         alignment: 'left' // Displays dropdown with edge aligned to the left of button
       });
       $('ul.tabs').tabs();
-      $('.datepicker').pickadate({
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 15 // Creates a dropdown of 15 years to control year
-      });
     });
+
+    $scope.modelOptions = {
+      updateOn: 'blur'
+    };
 
     $scope.expandNew = function () {
       console.log(`expand test run`);
@@ -38,6 +38,13 @@ UpsellTracker.controller("UpsellCtrl",
     
     // defaults to account name sort
     $scope.filterOption = 'AccountName';
+
+    // $scope.mrrSort = function (upsell) {
+    //   if (!upsell.NewMRR) {
+    //     return -1; 
+    //   };
+    //   return upsell.NewMRR;
+    // };
 
     // scope upsell variable which holds all upsells passed from UpsellsFactory
     // use ng-show/hide or ng-if to display current user's data on partial
@@ -71,6 +78,7 @@ UpsellTracker.controller("UpsellCtrl",
 
     // date reformatting into Date instances
     $scope.dateReformat = function (dateObject) {
+      console.log(`dateObject.DateSent: `, dateObject.DateSent);
       dateObject.DateSent = new Date(dateObject.DateSent);
       dateObject.DateClosed = new Date(dateObject.DateClosed);
     };

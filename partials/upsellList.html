@@ -1,11 +1,11 @@
 <article class="upsellList container">
-
+{{ filterOption }}
   <div class="row">
     <div class="col s12 tabs">
       <ul class="tabs">
 				<li class="tab col s3"><a ng-click="filterOption = 'AccountName'"><i class="dropdownIcons tiny material-icons">sort_by_alpha</i>Account Name</a></li>
 				<li class="tab col s3"><a ng-click="filterOption = 'closed'"><i class="dropdownIcons tiny material-icons">thumb_up</i>Status</a></li>
-				<li class="tab col s3" ng-if="$parent.currentUser.admin"><a ng-click="filterOption = 'CSM'"><i class="dropdownIcons tiny material-icons">contacts</i>CSM</a></li>
+				<li class="tab col s3" ng-hide="!$parent.currentUser.admin"><a ng-click="filterOption = 'CSM'"><i class="dropdownIcons tiny material-icons">contacts</i>CSM</a></li>
 				<li class="tab col s3"><a ng-click="filterOption = '-NewMRR'"><i class="dropdownIcons tiny material-icons">toll</i>MRR</a></li>
       </ul>
     </div>
@@ -15,7 +15,7 @@
  	<ul class="collapsible popout upsellList" data-collapsible="accordion">
 
 		<!-- ngRepeat li -->
-    <li class="hoverable row" ng-repeat="upsell in upsells | orderBy: filterOption" ng-class="{'newUpsellStyle': upsell.isNew}" ng-if="viewAllowed(upsell)">
+    <li class="hoverable row" ng-repeat="upsell in upsells | orderBy: filterOption | filter: NewMRR" ng-class="{'newUpsellStyle': upsell.isNew}" ng-if="viewAllowed(upsell)">
 
     <div class="collapsible-header" ng-class="{ 'blue': upsell.closed, 'orange': upsell.edited, 'newUpsellStyle': upsell.isNew }">
 			
@@ -23,7 +23,7 @@
 			<div class="col s1">
     		<i class="material-icons" ng-show="upsell.edited">report_problem</i>
     		<i class="material-icons" ng-show="!upsell.edited && !upsell.closed">filter_drama</i>
-    		<i class="material-icons" ng-show="upsell.closed">done</i>
+    		<i class="material-icons" ng-show="upsell.closed && !upsell.edited">done</i>
     		<br>
 			</div>
 
@@ -49,7 +49,7 @@
 
 			<div class="col s6">
 				<span class="left" ng-show="upsell.edited">[ UNSAVED ]</span>
-				<span class="right">{{ upsell.NewMRR - upsell.PreviousMRR + upsell.OneTimeFee | currency }}</span>
+				<span class="right" ng-show="upsell.NewMRR && !upsell.edited">{{ upsell.NewMRR - upsell.PreviousMRR + upsell.OneTimeFee | currency }}</span>
 			</div>
 
   	</div>
@@ -69,7 +69,7 @@
 						<div class="col s12">
 							<md-input-container class="md-block">
 				        <label>Account Name</label>
-				        <input required md-no-asterisk="" name="AccountName" ng-model="upsell.AccountName" ng-change="upsell.edited = true">
+				        <input required md-no-asterisk="" name="AccountName" ng-model="upsell.AccountName" ng-model-options="modelOptions" ng-change="upsell.edited = true">
 				        <div ng-messages="testForm.AccountName.$error" ng-show="testForm.AccountName.$touched">
 				          <div ng-message="required">This is required.</div>
 				        </div>
@@ -80,7 +80,7 @@
 						<div class="col s12">
 							<md-input-container class="md-block">
 				        <label>Account ID</label>
-				        <input ng-pattern="/^[0-9]{6}$/" required md-no-asterisk="" name="AccountID" ng-model="upsell.AccountID" ng-change="upsell.edited = true">
+				        <input ng-pattern="/^[0-9]{6}$/" required md-no-asterisk="" name="AccountID" ng-model="upsell.AccountID" ng-change="upsell.edited = true" ng-model-options="modelOptions">
 				        <div ng-messages="testForm.AccountID.$error" ng-show="testForm.AccountID.$touched">
 				          <div ng-message="required">This is required.</div>
 				          <div ng-message="pattern">Must be a six digit number.</div>
@@ -99,7 +99,7 @@
 						<div class="col s12">
 							<md-input-container class="md-block">
 				        <label>Contract ID</label>
-				        <input ng-pattern="/^[0-9]{6}$/" required md-no-asterisk="" name="PreviousContractID" ng-model="upsell.PreviousContractID" ng-change="upsell.edited = true">
+				        <input ng-pattern="/^[0-9]{6}$/" required md-no-asterisk="" name="PreviousContractID" ng-model="upsell.PreviousContractID" ng-model-options="modelOptions" ng-change="upsell.edited = true">
 				        <div ng-messages="testForm.PreviousContractID.$error">
 				          <div ng-message="required">This is required.</div>
 				          <div ng-message="pattern">Must be 6 digits.</div>
@@ -111,7 +111,7 @@
 						<div class="col s12">
 							<md-input-container class="md-block">
 				        <label>Previous MRR (USD)</label>
-				        <input ng-pattern="/^[0-9]*$/" required md-no-asterisk="" name="PreviousMRR" ng-model="upsell.PreviousMRR" ng-change="upsell.edited = true">
+				        <input ng-pattern="/^[0-9]*$/" required md-no-asterisk="" name="PreviousMRR" ng-model="upsell.PreviousMRR" ng-model-options="modelOptions" ng-change="upsell.edited = true">
 				        <div ng-messages="testForm.PreviousMRR.$error" ng-show="testForm.PreviousMRR.$touched">
 				          <div ng-message="required">This is required.</div>
 				          <div ng-message="pattern">Must be a number.</div>
@@ -131,7 +131,7 @@
 						<div class="col s6">
 							<md-input-container class="md-block">
 				        <label>Contract ID</label>
-				        <input ng-pattern="/^[0-9]{6}$/" name="NewContractID" ng-model="upsell.NewContractID" ng-change="upsell.edited = true" ensure-expression="{ greaterThanOld: upsell.NewContractID ? upsell.NewContractID > upsell.PreviousContractID : true }" ng-model-options="{allowInvalid:true}">
+				        <input ng-pattern="/^[0-9]{6}$/" name="NewContractID" ng-model="upsell.NewContractID" ng-change="upsell.edited = true" ensure-expression="{ greaterThanOld: upsell.NewContractID ? upsell.NewContractID > upsell.PreviousContractID : true }" ng-model-options="modelOptions">
 				        <div ng-messages="testForm.NewContractID.$error" ng-show="testForm.NewContractID.$touched">
 				          <div ng-message="pattern">Must be 6 digits.</div>
 				          <div ng-message="greaterThanOld">New Contract ID must be greater than Previous Contract ID.</div>
@@ -143,7 +143,7 @@
 						<div class="col s6">
 							<md-input-container class="md-block">
 				        <label>Order ID</label>
-				        <input ng-pattern="/^[0-9]{7}$/" ng-required="upsell.NewContractID" md-no-asterisk="" name="OrderID" ng-model="upsell.OrderID" ng-change="upsell.edited = true">
+				        <input ng-pattern="/^[0-9]{7}$/" ng-required="upsell.NewContractID" md-no-asterisk="" name="OrderID" ng-model="upsell.OrderID" ng-model-options="modelOptions" ng-change="upsell.edited = true">
 				        <div ng-messages="testForm.OrderID.$error" ng-show="testForm.OrderID.$touched">
 				          <div ng-message="required">Order ID required with New Contract</div>
 				          <div ng-message="pattern">Must be a 7 digit number</div>
@@ -155,7 +155,7 @@
 						<div class="col s6">
 							<md-input-container class="md-block">
 				        <label>New MRR (USD)</label>
-				        <input ng-pattern="/^[0-9]*$/" ng-required="upsell.NewContractID" name="NewMRR" ng-model="upsell.NewMRR" ng-change="upsell.edited = true">
+				        <input ng-pattern="/^[0-9]*$/" ng-required="upsell.NewContractID" name="NewMRR" ng-model-options="modelOptions" ng-model="upsell.NewMRR" ng-change="upsell.edited = true">
 				        <div ng-messages="testForm.NewMRR.$error" ng-show="testForm.NewMRR.$touched">
 				          <div ng-message="pattern">Must be a number</div>
 				          <div ng-message="required">New MRR required with New Contract</div>
@@ -167,7 +167,7 @@
 						<div class="col s6">
 							<md-input-container class="md-block">
 				        <label>One Time Fee</label>
-				        <input ng-pattern="/^[0-9]*$/" md-no-asterisk="" name="OneTimeFee" ng-model="upsell.OneTimeFee" ng-change="upsell.edited = true">
+				        <input ng-pattern="/^[0-9]*$/" md-no-asterisk="" name="OneTimeFee" ng-model-options="modelOptions" ng-model="upsell.OneTimeFee" ng-change="upsell.edited = true">
 				        <div ng-messages="testForm.OneTimeFee.$error" ng-show="testForm.OneTimeFee.$touched">
 				          <div ng-message="pattern">Must be a valid number.</div>
 				        </div>
@@ -183,18 +183,18 @@
 						
 						<!-- Date Sent -->
 						<div class="col s12">
-							<label class="center-align">Date Sent</label>
-					  	<md-datepicker ng-model="upsell.DateSent" md-placeholder="Enter date sent" ng-change="upsell.edited = true"></md-datepicker>
+							<label class="">Date Sent</label>
+					  	<md-datepicker ng-model="upsell.DateSent" ng-change="upsell.edited = true"></md-datepicker>
 						</div>
 						
 						<!-- Date Closed -->
 						<div class="col s12">
-							<label class="center-align">Date Closed</label>
-					  	<md-datepicker ng-model="upsell.DateClosed" md-placeholder="Enter date closed" md-min-date="upsell.DateSent" ng-change="upsell.edited = true"></md-datepicker>
+							<label class="">Date Closed</label>
+					  	<md-datepicker ng-model="upsell.DateClosed" md-min-date="upsell.DateSent" ng-change="upsell.edited = true"></md-datepicker>
 				  	</div>
 
 						<!-- Closed Switch -->
-						<div class="col s12">
+						<div class="col s12 left">
 							<md-checkbox ng-model="upsell.closed" aria-label="Checkbox 1" ng-change="upsell.edited = true">
 				      	<label ng-if="upsell.closed">Closed</label>
 				      	<label ng-if="!upsell.closed">Working</label>							

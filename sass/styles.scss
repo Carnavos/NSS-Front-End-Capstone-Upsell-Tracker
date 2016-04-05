@@ -19,6 +19,16 @@ span {
 	margin-bottom: 0;
 }
 
+.md-datepicker-button {
+    display: none !important;   
+}
+
+// second border removal on date pick
+.md-datepicker-input-container {
+    margin-left: 0 !important;
+    border-bottom: none!important;    
+}
+
 .closedUpsell {
 	@extend .blue, .lighten-4;
 }
@@ -49,6 +59,8 @@ span {
 }
 body {
     font-family: "Roboto", 'Helvetica Neue, Helvetica, Arial', sans-serif; 
+    // permanent scroll bar
+    overflow-y: scroll;
 }
 
 // Login Styles
