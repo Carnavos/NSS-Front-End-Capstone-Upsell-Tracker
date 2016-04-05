@@ -5,10 +5,6 @@ span {
 	display: inline-block;
 }
 
-.collapsiblePreview:after {
-	content: " | ";
-}
-
 // md-collapsible input elements
 
 .md-input-container {
@@ -20,17 +16,44 @@ span {
 }
 
 .md-datepicker-button {
-    display: none !important;   
+  display: none !important;   
 }
 
 // second border removal on date pick
 .md-datepicker-input-container {
-    margin-left: 0 !important;
-    border-bottom: none!important;    
+  margin-left: 0 !important;
+  border-bottom: none!important;    
 }
 
 .closedUpsell {
 	@extend .blue, .lighten-4;
+}
+
+.primaryBgColor {
+  @extends .blue-grey;
+}
+
+.primaryText {
+  font-weight: 300;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  
+}
+.tabsText {
+  @extend .grey-text, .text-darken-1;
+}
+
+.listText {
+  @extends .primaryText;
+  font-weight: 400;
+}
+.secondaryText {
+  font-style: italic;
+}
+
+.tertiaryText {
+  @extends .secondaryText;
+  font-weight: thin;
 }
 
 // icon + txt spacing
@@ -41,6 +64,7 @@ span {
 // create space between nav and upsells
 .upsellList {
   margin-top: 40px!important;
+  // background-image: url("/images/jPollock.jpg");
 }
 
 .tabs, .tab {

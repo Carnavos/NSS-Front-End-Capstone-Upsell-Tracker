@@ -1,23 +1,22 @@
 <article class="upsellList container">
-{{ filterOption }}
   <div class="row">
     <div class="col s12 tabs">
-      <ul class="tabs">
-				<li class="tab col s3"><a ng-click="filterOption = 'AccountName'"><i class="dropdownIcons tiny material-icons">sort_by_alpha</i>Account Name</a></li>
+      <ul class="tabs secondaryText">
 				<li class="tab col s3"><a ng-click="filterOption = 'closed'"><i class="dropdownIcons tiny material-icons">thumb_up</i>Status</a></li>
 				<li class="tab col s3" ng-hide="!$parent.currentUser.admin"><a ng-click="filterOption = 'CSM'"><i class="dropdownIcons tiny material-icons">contacts</i>CSM</a></li>
+				<li class="tab col s3"><a ng-click="filterOption = 'AccountName'"><i class="dropdownIcons tiny material-icons">sort_by_alpha</i>Account Name</a></li>
 				<li class="tab col s3"><a ng-click="filterOption = '-NewMRR'"><i class="dropdownIcons tiny material-icons">toll</i>MRR</a></li>
       </ul>
     </div>
   </div>	
 
 	<!-- ng-Repeat through upsells and display only those which meet access permission -->
- 	<ul class="collapsible popout upsellList" data-collapsible="accordion">
+ 	<ul class="collapsible popout upsellList z-depth-5" data-collapsible="accordion">
 
 		<!-- ngRepeat li -->
-    <li class="hoverable row" ng-repeat="upsell in upsells | orderBy: filterOption | filter: NewMRR" ng-class="{'newUpsellStyle': upsell.isNew}" ng-if="viewAllowed(upsell)">
+    <li class="hoverable row listText" ng-repeat="upsell in upsells | orderBy: filterOption | filter: NewMRR" ng-class="{'newUpsellStyle': upsell.isNew}" ng-if="viewAllowed(upsell)">
 
-    <div class="collapsible-header" ng-class="{ 'blue': upsell.closed, 'orange': upsell.edited, 'newUpsellStyle': upsell.isNew }">
+    <div class="collapsible-header" ng-class="{ 'green accent-1': upsell.closed, 'orange accent-2': upsell.edited, 'newUpsellStyle': upsell.isNew }">
 			
 			<!-- First Column -->
 			<div class="col s1">
@@ -30,8 +29,6 @@
 			<!-- Second Column -->
 			<div class="col s2">
 				<span ng-if="$parent.currentUser.admin" class="">{{ upsell.CSM }}</span>
-				<!-- Lord Petit Pic -->
-				<span ng-if="$parent.currentUser.userName === 'Nick Petit'" class="">{{ upsell.CSM }}</span>
 				<br>
 			</div>
 
@@ -56,7 +53,7 @@
 
   	<!-- Collapsible BODY -->
 		<!-- <div class="collapsible-body" ng-class="{'newUpsellStyle': upsell.isNew}">  -->
-		<div class="collapsible-body"> 
+		<div class="collapsible-body primaryText"> 
 			<form class="row center-align" name="testForm">
 				<div class="col s12">
 
@@ -212,7 +209,7 @@
 							<button type="button" ng-show="upsell.id" class="waves-effect waves-teal btn-flat" ng-click="deleteUpsell(upsell.id)">Delete</button>
 							<button type="button" ng-show="!upsell.id" class="waves-effect waves-teal btn-flat" ng-click="cancelAdd($$hashKey)">Cancel</button>
 						</div>
-						{{ upsell | json }}
+						<!-- {{ upsell | json }} -->
 					</div>
 
 				</div> <!-- End Main Column -->
@@ -223,12 +220,12 @@
   </ul>
 
   <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-    <a ng-click="addUpsellLocal()" class="btn-floating btn-large red">
+    <a ng-click="addUpsellLocal()" class="btn-floating btn-large blue-grey darken-2">
       <i class="large material-icons">note_add</i>
     </a>
     <ul>
-      <li><a class="btn-floating blue" ng-click="addTestUpsell()"><i class="material-icons">input</i></a></li>
-      <li><a class="btn-floating green" ng-csv="getUpsells()" filename="export.csv" csv-header="getHeaders()"><i class="material-icons">play_for_work</i></a></li>
+      <li><a class="btn-floating blue-grey lighten-3" ng-click="addTestUpsell()"><i class="material-icons">input</i></a></li>
+      <li><a class="btn-floating blue-grey lighten-1" ng-csv="getUpsells()" filename="export.csv" csv-header="getHeaders()"><i class="material-icons">play_for_work</i></a></li>
     </ul>
   </div>
 
