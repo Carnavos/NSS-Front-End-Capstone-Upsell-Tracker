@@ -15,18 +15,43 @@
  	<ul class="collapsible popout upsellList" data-collapsible="accordion">
 
 		<!-- ngRepeat li -->
-    <li class="hoverable" ng-repeat="upsell in upsells | orderBy: filterOption" ng-class="{'newUpsellStyle': upsell.isNew}" ng-if="viewAllowed(upsell)">
+    <li class="hoverable row" ng-repeat="upsell in upsells | orderBy: filterOption" ng-class="{'newUpsellStyle': upsell.isNew}" ng-if="viewAllowed(upsell)">
 
     <div class="collapsible-header" ng-class="{ 'blue': upsell.closed, 'orange': upsell.edited, 'newUpsellStyle': upsell.isNew }">
-    	<i class="material-icons">filter_drama</i>
-			<span ng-if="$parent.currentUser.admin" class="collapsiblePreview left">{{ upsell.CSM }}</span>
-			<span class="collapsiblePreview left">{{ upsell.AccountName }}</span>
-			<!-- <span class="collapsiblePreview left">{{ $index }}</span> -->
-			<span class="collapsiblePreview left" ng-show="!upsell.AccountName">New Upsell</span>
-			<span class="center-align" ng-show="upsell.edited">[ UNSAVED ]</span>
-			<span class="right">Net: {{ upsell.NewMRR - upsell.PreviousMRR | currency }}</span>
-			<span class="collapsiblePreview right" ng-if="upsell.closed">Closed</span>
-			<span class="collapsiblePreview right" ng-if="!upsell.closed">Open</span>
+			
+			<!-- First Column -->
+			<div class="col s1">
+    		<i class="material-icons" ng-show="upsell.edited">report_problem</i>
+    		<i class="material-icons" ng-show="!upsell.edited && !upsell.closed">filter_drama</i>
+    		<i class="material-icons" ng-show="upsell.closed">done</i>
+    		<br>
+			</div>
+
+			<!-- Second Column -->
+			<div class="col s2">
+				<span ng-if="$parent.currentUser.admin" class="">{{ upsell.CSM }}</span>
+				<!-- Lord Petit Pic -->
+				<span ng-if="$parent.currentUser.CSM === 'Nick Petit'" class="">{{ upsell.CSM }}</span>
+				<br>
+			</div>
+
+			<!-- Third Column -->
+			<div class="col s3">
+				<span class="">{{ upsell.AccountName }}</span>
+				<span class="" ng-show="!upsell.AccountName">New Upsell</span>
+			</div>
+
+			<!-- Fourth Column -->
+			<!-- <div class="col s3"> -->
+				<!-- <span class="" ng-if="upsell.closed">Closed</span> -->
+				<!-- <span class="" ng-if="!upsell.closed">Open</span> -->
+			<!-- </div> -->
+
+			<div class="col s6">
+				<span class="left" ng-show="upsell.edited">[ UNSAVED ]</span>
+				<span class="right">{{ upsell.NewMRR - upsell.PreviousMRR + upsell.OneTimeFee | currency }}</span>
+			</div>
+
   	</div>
 
   	<!-- Collapsible BODY -->
