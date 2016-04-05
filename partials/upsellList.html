@@ -5,8 +5,8 @@
       <ul class="tabs">
 				<li class="tab col s3"><a ng-click="filterOption = 'AccountName'"><i class="dropdownIcons tiny material-icons">sort_by_alpha</i>Account Name</a></li>
 				<li class="tab col s3"><a ng-click="filterOption = 'closed'"><i class="dropdownIcons tiny material-icons">thumb_up</i>Status</a></li>
-				<li class="tab col s3"><a ng-click="filterOption = 'CSM'"><i class="dropdownIcons tiny material-icons">contacts</i>CSM</a></li>
-				<li class="tab col s3" ng-show="$parent.currentUser.admin"><a ng-click="filterOption = '-NewMRR'"><i class="dropdownIcons tiny material-icons">toll</i>MRR</a></li>
+				<li class="tab col s3" ng-if="$parent.currentUser.admin"><a ng-click="filterOption = 'CSM'"><i class="dropdownIcons tiny material-icons">contacts</i>CSM</a></li>
+				<li class="tab col s3"><a ng-click="filterOption = '-NewMRR'"><i class="dropdownIcons tiny material-icons">toll</i>MRR</a></li>
       </ul>
     </div>
   </div>	
@@ -31,7 +31,7 @@
 			<div class="col s2">
 				<span ng-if="$parent.currentUser.admin" class="">{{ upsell.CSM }}</span>
 				<!-- Lord Petit Pic -->
-				<span ng-if="$parent.currentUser.CSM === 'Nick Petit'" class="">{{ upsell.CSM }}</span>
+				<span ng-if="$parent.currentUser.userName === 'Nick Petit'" class="">{{ upsell.CSM }}</span>
 				<br>
 			</div>
 
@@ -227,7 +227,7 @@
       <i class="large material-icons">note_add</i>
     </a>
     <ul>
-      <li><a class="btn-floating blue" ng-csv="addTestUpsell()"><i class="material-icons">input</i></a></li>
+      <li><a class="btn-floating blue" ng-click="addTestUpsell()"><i class="material-icons">input</i></a></li>
       <li><a class="btn-floating green" ng-csv="getUpsells()" filename="export.csv" csv-header="getHeaders()"><i class="material-icons">play_for_work</i></a></li>
     </ul>
   </div>
